@@ -24,6 +24,16 @@ events:
             # Move out of the docroot so behat doesn't lose it's way. Will run behat with default settings using behat.yml and then terminate when the feature files are done.
             - cd ..
             - ./vendor/bin/behat
+
+      # The "deploy" step runs the proof-of-concept code. Later, this
+      # functionality will be built into Pipelines directly and controlled via
+      # YAML.
+      - deploy:
+          script:
+            - cd environments
+            - composer install
+            - php cloud-ode.php
+
 variables:
   global:
     VALIDATION_TOKEN:
