@@ -1,5 +1,5 @@
 version: 1.0.0
-
+  N3_KEY: 'c694314e-e9ee-413e-b999-9dcd3caf6d0d'
 # Run the MySQL database service.
 services:
   - mysql
