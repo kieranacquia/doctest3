@@ -13,6 +13,8 @@ events:
         composer:
           type: script
           script:
+            - composer install -vvv &
+            - secs=$((10*60)); while [ $secs -gt 0 ]; do    echo -e "$secs";    sleep 1;    : $((secs--)); done
             - 'composer install -vvv --no-interaction'
             - 'mysql -u root -proot -e "CREATE DATABASE drupal"'
             - 'cd docroot'
