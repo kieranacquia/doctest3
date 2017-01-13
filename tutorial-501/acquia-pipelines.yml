@@ -1,40 +1,29 @@
 version: 1.0.0
-  N3_KEY: 'c694314e-e9ee-413e-b999-9dcd3caf6d0d'
-# Run the MySQL database service.
+variables:
+  global:
+    N3_SECRET:
+      secure: 2achW1Q1CVGu2atrj+8S5PqZkeFeU/333hhnxFgIOY9rwNtSv/oSaG5+J1FJXJs9rw/Q2fpEjUQpwemGjTaPk+JTC4be/EIOa9hMPEKy68t/apoXk98s1yZwikmbCdxHS3ZOBMPk6ACN1nMYdqjaaB4QesOZ86DJD4qQQ3MXSUNqXcljsy9+qN8R7NMroiffnyx008fsC1L9D1DXwsaODFkIJGo94CwkbarcK33ShUWBqb0vmmS3D1o42rrCIDEF3Vvp50GT5RT9f+lyAfEJljRC0vCkqxq1VDwZXvVLIr+Thry52nZMIG+aLBTTN8xCPDk5ATGaBV3mLqECHomyzjZJ5UdjV71Ls7DCG2Bcb+o8qTJDD5Je6yS98rYhW/LIeN7JsoXxXbQ+/mLkZO52iiDV6nStYU4hLL5yMOg6kPuhnNCc1JPUB8lcMRciDDSASlvhYwq6xdzea7ct4BtDKEgJM6u9iU7SsqOkZvVppt5IQ2olO/EnOhbxBnD49tu6jVOgiqL9sTOgFd87VayH1EMqOvLGBekHYkMuSGMSG+uTt+9OnYfNCIrTua3+Mb6AOxoNGAxYDCMGcWP5C1GBf15bfGNO4VL678+Qybjl5E8g9lKQH2yGuBCvuIEb2Zug19/8GKjviGE+WKR3P7Ko0SjqsJPvvk8sYqHjrxdYmkLXu8=ci4ew756EmPAqg9FbVqB9S0vVIydcTUPZ0s69f7Iox9IB4Z6VOgJfCVg0kBRtYcy
+  N3_KEY: c694314e-e9ee-413e-b999-9dcd3caf6d0d
 services:
   - mysql
-
 events:
   build:
     steps:
-      - composer:
+      -
+        composer:
           type: script
           script:
-            # Need to quiet composer so that the logs aren't 6 million chars
-            - composer install --no-interaction
-            # Create database for new Drupal install. Settings.php can't have creds in it, otherwise Drupal throws AlreadyInstalledException
-            - mysql -u root -proot -e "CREATE DATABASE drupal"
-            # Move to the docroot to run drush
-            - cd docroot
-            # Use drush to install the default profile. Change if you want different drush arguments. Mysql must be on 127.0.0.1. Silencing a drush si mail issue. Pass in newly created database called drupal
-            - /usr/bin/env PHP_OPTIONS="-d sendmail_path=`which true`" ../vendor/bin/drush site-install -y --db-url=mysql://root:root@127.0.0.1:3306/drupal
-            # Use php webserver as this is known to work in the container. Wait 2 seconds for PHP server to get set-up.
-            - php -S 127.0.0.1:8081 &
-            - sleep 2
-            # Move out of the docroot so behat doesn't lose it's way. Will run behat with default settings using behat.yml and then terminate when the feature files are done.
-            - cd ..
+            - 'composer install --no-interaction'
+            - 'mysql -u root -proot -e "CREATE DATABASE drupal"'
+            - 'cd docroot'
+            - '/usr/bin/env PHP_OPTIONS="-d sendmail_path=`which true`" ../vendor/bin/drush site-install -y --db-url=mysql://root:root@127.0.0.1:3306/drupal'
+            - 'php -S 127.0.0.1:8081 &'
+            - 'sleep 2'
+            - 'cd ..'
             - ./vendor/bin/behat
-
-      # The "deploy" step runs the proof-of-concept code. Later, this
-      # functionality will be built into Pipelines directly and controlled via
-      # YAML.
-      - deploy:
+      -
+        deploy:
           script:
-            - cd environments
-            - composer install
-            - php cloud-ode.php
-
-variables:
-  global:
-    VALIDATION_TOKEN:
-      secure: 2acfIynfp734BVEt7dyeeacJxZiMPl0SBUMz9k0gWbWvHrrpBgshuIA3BsEhLfM/RwiMmaYjxv9f0ndYcr4K5SlxJlydGLGwEVb5pOFEbhVqnhBjm369TLpYW9Z3Q9VNK19vHs/suYVCtF1IGaL+P4xT/WgiR+Jk+ctJytDYWHHOj/F3cnJumzcRVAovch+nIKGcNAVO0HCCcFmqzoVrTl6PcYQWnVN8CcrnL/BWDtNuCxM5cNmnd9Yi1Nlr/uIEZC6bQcqGC9NF8Gpx302cnzp0EaWLlIKaGt0u7mHEjL9E4WXmJVPIlKuoQ9Z9Jn2RyKke3kZAg+2xitr/FKUiQghYywUW6FJeGgHschpKSt213e0LQlcxUXbcfcy5rmUOFVkmTa08ngM/vFfZhUJ2QlNI1+jBw8elYQMBEusPO9QUPfXYkFE2ryUwpEiPu3IKNEAJ2oKiNgaEl6+1U6k4gjE98VTYvvirAOaq1bi3AB+zvNs820FCLnJm4nuZeanDExcreKWUhg/Mtbm7xLmlIdRLxETfv+dVJ+ciSQybzX0YPQevz8GTFOWErKsX14RkyqUsbtpIqy5vXE4L7TzZeBqV3LAt2FQPwADHqY2a0wzdEVgks0+GuwsDySFP0CCKHsq8t/awiouJzhX2LkZ36mShoO1vC3Q8LuH1NtlL+rnYac=8rhS4s3Jd7/apYNHxSh7UXzhjamSLMqk+ht49aQw7Mi8UG4bbx/JeHoiK7Gokzm/
+            - 'cd environments'
+            - 'composer install'
+            - 'php cloud-ode.php'
