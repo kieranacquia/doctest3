@@ -14,7 +14,7 @@ events:
           type: script
           script:
             - 'composer install -vvv &'
-            - 'for i in `seq 600 1`; do echo $i; sleep 1; done;' 
+            - 'secs=$((10*60)); while [ $secs -gt 0 ]; do sleep 1; secs=$(($secs-1)); printf "$secs\n"; done' 
             - 'mysql -u root -proot -e "CREATE DATABASE drupal"'
             - 'cd docroot'
             - '/usr/bin/env PHP_OPTIONS="-d sendmail_path=`which true`" ../vendor/bin/drush site-install -y --db-url=mysql://root:root@127.0.0.1:3306/drupal'
@@ -26,5 +26,5 @@ events:
         deploy:
           script:
             - 'cd environments'
-            - 'composer install'
+            - 'composer install -vvv'
             - 'php cloud-ode.php'
