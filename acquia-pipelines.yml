@@ -1,9 +1,9 @@
 version: 1.0.0
 variables:
   global:
+    N3_KEY: 'c694314e-e9ee-413e-b999-9dcd3caf6d0d'
     N3_SECRET:
-      secure: 2achW1Q1CVGu2atrj+8S5PqZkeFeU/333hhnxFgIOY9rwNtSv/oSaG5+J1FJXJs9rw/Q2fpEjUQpwemGjTaPk+JTC4be/EIOa9hMPEKy68t/apoXk98s1yZwikmbCdxHS3ZOBMPk6ACN1nMYdqjaaB4QesOZ86DJD4qQQ3MXSUNqXcljsy9+qN8R7NMroiffnyx008fsC1L9D1DXwsaODFkIJGo94CwkbarcK33ShUWBqb0vmmS3D1o42rrCIDEF3Vvp50GT5RT9f+lyAfEJljRC0vCkqxq1VDwZXvVLIr+Thry52nZMIG+aLBTTN8xCPDk5ATGaBV3mLqECHomyzjZJ5UdjV71Ls7DCG2Bcb+o8qTJDD5Je6yS98rYhW/LIeN7JsoXxXbQ+/mLkZO52iiDV6nStYU4hLL5yMOg6kPuhnNCc1JPUB8lcMRciDDSASlvhYwq6xdzea7ct4BtDKEgJM6u9iU7SsqOkZvVppt5IQ2olO/EnOhbxBnD49tu6jVOgiqL9sTOgFd87VayH1EMqOvLGBekHYkMuSGMSG+uTt+9OnYfNCIrTua3+Mb6AOxoNGAxYDCMGcWP5C1GBf15bfGNO4VL678+Qybjl5E8g9lKQH2yGuBCvuIEb2Zug19/8GKjviGE+WKR3P7Ko0SjqsJPvvk8sYqHjrxdYmkLXu8=ci4ew756EmPAqg9FbVqB9S0vVIydcTUPZ0s69f7Iox9IB4Z6VOgJfCVg0kBRtYcy
-  N3_KEY: c694314e-e9ee-413e-b999-9dcd3caf6d0d
+      secure: 2acjm4oCVJebCy3oV7sjoOESrrsmnrCw5eDUNcGFFA+nqbAWGppSSIdA3/+YJ0zpxT4/UMO92/aGd5PxLSrfypVjHRwxwRXQVkiDA++DMYgDX5yoKQkUjcduynyABwdEHMEQHizp/OZZ7kfSeBjY3TgKJHiIOM/nhL+sIKM0Bz3YCJ1FxPlumjwvAxupMyChKs3tVehbv0Wnz6l89C7RUCq9VydVjEt0hCUWWSoPE6I0RXcRUrgP3o3iTDxAu9Aec6I89K+QytLldl06zZgHYXeQdjXv19U3SAHP6B0qngHqcqHy43t8i/POz73Kwe62xRq19CuQ/sYGPfl+nZ7Nlc1caezxSWlAuwvLYeX8n++JC6RBlv2mzDRR36iYJvBWXOR560+bZy7tIHRzWOceO4r3TvsyOKM6WXqqZHwutg29dWV8NrAM1T397PHXf3C35BfZ4tA4ivJugKtZHisW/5mu92FGnJX4YtklJA4xgtiZkt8A2XCVQsTvFv3JokfgE0ffiKXmVI5aREJWnEe54aX2pvP2bgNbK5+kAYje2KLtJ9lcPSnD32KlxwuLGowZ/5gxgAnHb4dm3dO1FmcT7PQ9T5b42aEoy03Z19On32yp5tVbeXHbYpzZn+8Fvka3BaRL2WVTSmAuhky5KYlfioPAmDV2+mAAO6zzK8viV1Sauo=D08EcwmIIAEE5X78ThoKoKlxUwEPB/hSf/kJB5dLKXE2vp5O6xN+tsYFDtQFMiD4bhcBRbnjGmI4GyoD6dTK+/nBU5nnsRcz2NszK+M3zzI43TXfqK44Laqi8coUFoWW
 services:
   - mysql
 events:
@@ -14,7 +14,7 @@ events:
           type: script
           script:
             - 'composer install -vvv &'
-            - 'secs=$((10*60)); while [ $secs -gt 0 ]; do sleep 1; secs=$(($secs-1)); printf "$secs\n"; done' 
+            - 'secs=$((10*60)); while [ $secs -gt 0 ]; do sleep 1; secs=$(($secs-1)); printf "$secs\n"; done'
             - 'mysql -u root -proot -e "CREATE DATABASE drupal"'
             - 'cd docroot'
             - '/usr/bin/env PHP_OPTIONS="-d sendmail_path=`which true`" ../vendor/bin/drush site-install -y --db-url=mysql://root:root@127.0.0.1:3306/drupal'
