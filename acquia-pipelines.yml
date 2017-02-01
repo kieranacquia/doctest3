@@ -25,5 +25,5 @@ events:
         deploy:
           script:
             - 'cd environments'
-            - 'composer install -vvv &'
+            - 'composer install'
             - 'php cloud-ode.php'
