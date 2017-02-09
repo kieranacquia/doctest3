@@ -22,8 +22,3 @@ events:
             - 'cd ..'
             - ./vendor/bin/behat
       -
-        deploy:
-          script:
-            - 'cd environments'
-            - 'composer install'
-            - 'php cloud-ode.php'
