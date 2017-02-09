@@ -21,4 +21,3 @@ events:
             - 'sleep 2'
             - 'cd ..'
             - ./vendor/bin/behat
-      -
