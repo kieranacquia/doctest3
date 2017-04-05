@@ -21,3 +21,4 @@ The steps are:
 ```
 * Run ```pipelines start```.
 * When ```pipelines status``` shows the job is complete, run ```pipeline logs``` to see the results of the Behat tests.
+
